@@ -7,6 +7,12 @@ data/*
 # Modèles entraînés
 artifacts/
 
+# Notebooks
+notebooks/brouillons/*
+
+# Installation éditable
+*.egg-info/
+
 # Environnement et caches
 .venv/
 __pycache__/

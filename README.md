@@ -17,7 +17,7 @@ modèle est servi par une API qui traite une commande à la fois.
 100 000 commandes passées entre 2016 et 2018, réparties dans 9 tables (commandes, articles,
 produits, vendeurs, clients, géolocalisation, paiements, avis).
 
-Les données ne sont pas incluses dans ce dépôt (voir [`data/README.md`](data/README.md)) pour les
+Les données ne sont pas incluses dans ce dépôt : voir [`data/README.md`](data/README.md) pour les
 obtenir.
 
 ## Structure du dépôt
@@ -42,17 +42,19 @@ cd olist-promesse-livraison
 python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements-dev.txt
+pip install -e .
 ```
 
 Placer ensuite les données dans `data/raw/` en suivant [`data/README.md`](data/README.md).
 
 `requirements.txt` contient les dépendances du code, `requirements-dev.txt` y ajoute les outils de
 développement (Jupyter, visualisation, tests).
+`pip install -e .` installe le code du projet en mode éditable : les modifications de `src/` sont prises en compte sans réinstallation.
 
 ## Avancement
 
 - [x] Mise en place du dépôt et de l'environnement
-- [ ] Extraction des données (SQL)
+- [x] Extraction des données (SQL)
 - [ ] Analyse exploratoire
 - [ ] Protocole de validation et bases de comparaison
 - [ ] Variables et modèles
