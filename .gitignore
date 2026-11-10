@@ -1,0 +1,14 @@
+# Données
+data/*
+!data/README.md
+*.csv
+*.parquet
+
+# Modèles entraînés
+artifacts/
+
+# Environnement et caches
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.pytest_cache/
