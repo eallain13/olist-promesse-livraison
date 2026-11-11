@@ -56,7 +56,7 @@ développement (Jupyter, visualisation, tests).
 - [x] Mise en place du dépôt et de l'environnement
 - [x] Extraction des données (SQL)
 - [x] Analyse exploratoire
-- [ ] Protocole de validation et bases de comparaison
+- [x] Protocole de validation et bases de comparaison
 - [ ] Variables et modèles
 - [ ] Promesse de livraison (régression quantile)
 - [ ] Interprétation et analyse des erreurs
