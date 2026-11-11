@@ -57,7 +57,7 @@ développement (Jupyter, visualisation, tests).
 - [x] Extraction des données (SQL)
 - [x] Analyse exploratoire
 - [x] Protocole de validation et bases de comparaison
-- [ ] Variables et modèles
+- [x] Variables et modèles
 - [ ] Promesse de livraison (régression quantile)
 - [ ] Interprétation et analyse des erreurs
 - [ ] API, tests et Docker

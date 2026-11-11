@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from olist_promesse.modeles import QuantileParGroupe, preparation
-from olist_promesse.variables import VARIABLES
+from olist_promesse.modeles import QuantileParGroupe, modele_gradient_boosting, preparation
+from olist_promesse.variables import COLONNES_BRUTES, VARIABLES
 
 
 def test_repli_sur_le_quantile_global():
@@ -29,3 +29,17 @@ def test_preparation_accepte_un_vendeur_et_un_etat_inconnus(commandes_brutes):
     assert np.isnan(sortie["customer_state"].iloc[0])
     vendeur = prep.named_steps["encodage"].named_transformers_["vendeur"]
     assert sortie["seller_id"].iloc[0] == pytest.approx(vendeur.target_mean_)
+
+
+def test_modele_predit_une_commande_a_partir_des_colonnes_brutes(commandes_brutes):
+    entrainement = pd.concat([commandes_brutes] * 4, ignore_index=True)
+    modele = modele_gradient_boosting().fit(entrainement[COLONNES_BRUTES], entrainement["delai_jours"])
+    prediction = modele.predict(commandes_brutes[COLONNES_BRUTES].iloc[[0]].assign(seller_id="inconnu"))
+    assert prediction.shape == (1,)
+    assert np.isfinite(prediction[0])
+
+
+def test_parametres_remplacent_les_reglages_par_defaut():
+    assert modele_gradient_boosting().get_params()["modele__loss"] == "absolute_error"
+    promesse = modele_gradient_boosting(loss="quantile", quantile=0.9).get_params()
+    assert (promesse["modele__loss"], promesse["modele__quantile"]) == ("quantile", 0.9)

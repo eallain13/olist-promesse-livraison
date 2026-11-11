@@ -5,8 +5,8 @@ import pandas as pd
 
 RAYON_TERRE_KM = 6371.0
 
-# Colonnes brutes que le modèle connues quand le client valide son
-# panier. Ce sont celles que le modèle peut lire et les informations que l'API recevra pour chaque commande.
+# Colonnes brutes connues quand le client valide son
+# panier. Ce sont les seules que le modèle lit, et les informations que l'API recevra pour chaque commande.
 COLONNES_BRUTES = [
     "order_purchase_timestamp",
     "seller_id",

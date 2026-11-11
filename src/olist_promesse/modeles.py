@@ -7,6 +7,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import KFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, OrdinalEncoder, TargetEncoder
+from sklearn.ensemble import HistGradientBoostingRegressor
 
 from olist_promesse.variables import (
     VARIABLE_VENDEUR,
@@ -77,3 +78,17 @@ def preparation() -> Pipeline:
         ("variables", FunctionTransformer(construire_variables)),
         ("encodage", encodage),
     ]).set_output(transform="pandas")
+
+
+def modele_gradient_boosting(**parametres) -> Pipeline:
+    """Pipeline complet : préparation des colonnes brutes, puis gradient boosting.
+
+    Par défaut, le modèle minimise l'erreur absolue et prédit donc le délai médian. Les paramètres
+    donnés remplacent les réglages par défaut (par exemple loss="quantile" et quantile=0.9 pour
+    promettre une date).
+    """
+    reglages = {"loss": "absolute_error", "categorical_features": VARIABLES_CATEGORIELLES, "random_state": 0}
+    return Pipeline([
+        ("preparation", preparation()),
+        ("modele", HistGradientBoostingRegressor(**(reglages | parametres))),
+    ])
