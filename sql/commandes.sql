@@ -44,6 +44,8 @@ WITH commandes AS (
         median(geolocation_lat) AS lat,
         median(geolocation_lng) AS lng
     FROM read_csv('olist_geolocation_dataset.csv', types = {'geolocation_zip_code_prefix': 'VARCHAR'})
+    WHERE geolocation_lat BETWEEN -34 AND 5.5
+      AND geolocation_lng BETWEEN -74 AND -32
     GROUP BY geolocation_zip_code_prefix
 )
 , avis AS (
