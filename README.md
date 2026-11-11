@@ -62,6 +62,17 @@ La documentation interactive de l'API est disponible sur http://127.0.0.1:8000/d
 une commande telle que le site la connaît au moment de l'achat, et renvoie le délai estimé, la date
 de livraison estimée et la date promise.
 
+### Avec Docker
+
+```bash
+python -m olist_promesse.entrainement   # les modèles sont entraînés hors de l'image
+docker build -t olist-promesse .
+docker run --rm -p 8000:8000 -v "$(pwd)/artifacts:/app/artifacts:ro" olist-promesse
+```
+
+L'image ne contient ni les données ni les modèles : le fichier `artifacts/modeles.joblib` est monté
+en lecture seule au lancement.
+
 ## Avancement
 
 - [x] Mise en place du dépôt et de l'environnement
@@ -71,7 +82,7 @@ de livraison estimée et la date promise.
 - [x] Variables et modèles
 - [x] Promesse de livraison (régression quantile)
 - [x] Interprétation et analyse des erreurs
-- [ ] API, tests et Docker
+- [x] API, tests et Docker
 - [ ] Intégration continue et publication
 
 ## Licence

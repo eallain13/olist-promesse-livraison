@@ -1,7 +1,2 @@
+-r requirements-api.txt
 duckdb==2.0.0
-fastapi==0.162.4
-joblib==1.6.0
-numpy==2.5.4
-pandas==3.1.1
-scikit-learn==1.9.1
-uvicorn==0.54.0
