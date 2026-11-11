@@ -51,6 +51,17 @@ Placer ensuite les données dans `data/raw/` en suivant [`data/README.md`](data/
 développement (Jupyter, visualisation, tests).
 `pip install -e .` installe le code du projet en mode éditable : les modifications de `src/` sont prises en compte sans réinstallation.
 
+## Utilisation
+
+```bash
+python -m olist_promesse.entrainement   # entraîne les modèles finaux (artifacts/modeles.joblib)
+uvicorn olist_promesse.api:app          # lance l'API sur http://127.0.0.1:8000
+```
+
+La documentation interactive de l'API est disponible sur http://127.0.0.1:8000/docs. L'API reçoit
+une commande telle que le site la connaît au moment de l'achat, et renvoie le délai estimé, la date
+de livraison estimée et la date promise.
+
 ## Avancement
 
 - [x] Mise en place du dépôt et de l'environnement

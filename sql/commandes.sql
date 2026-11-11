@@ -38,16 +38,6 @@ WITH commandes AS (
     FROM read_csv('olist_order_payments_dataset.csv')
     GROUP BY order_id
 )
-, geo AS (
-    SELECT
-        geolocation_zip_code_prefix AS prefixe,
-        median(geolocation_lat) AS lat,
-        median(geolocation_lng) AS lng
-    FROM read_csv('olist_geolocation_dataset.csv', types = {'geolocation_zip_code_prefix': 'VARCHAR'})
-    WHERE geolocation_lat BETWEEN -34 AND 5.5
-      AND geolocation_lng BETWEEN -74 AND -32
-    GROUP BY geolocation_zip_code_prefix
-)
 , avis AS (
     SELECT order_id, AVG(review_score) AS note_avis
     FROM read_csv('olist_order_reviews_dataset.csv')
@@ -88,7 +78,7 @@ LEFT JOIN read_csv('olist_customers_dataset.csv', types = {'customer_zip_code_pr
     ON cu.customer_id = c.customer_id
 LEFT JOIN read_csv('olist_sellers_dataset.csv', types = {'seller_zip_code_prefix': 'VARCHAR'}) AS s
     ON s.seller_id = a.seller_id
-LEFT JOIN geo AS gs ON gs.prefixe = s.seller_zip_code_prefix
-LEFT JOIN geo AS gc ON gc.prefixe = cu.customer_zip_code_prefix
+LEFT JOIN geolocalisation AS gs ON gs.prefixe = s.seller_zip_code_prefix
+LEFT JOIN geolocalisation AS gc ON gc.prefixe = cu.customer_zip_code_prefix
 LEFT JOIN avis AS av ON av.order_id = c.order_id
 ORDER BY c.order_purchase_timestamp, c.order_id
