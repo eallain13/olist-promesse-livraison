@@ -16,6 +16,10 @@ from olist_promesse.variables import (
     construire_variables,
 )
 
+# Quantile du délai visé par la promesse : sur les mois de validation, il donne le même taux de retard
+# que la promesse d'Olist (10,75 %). Choisi dans le notebook de la promesse.
+QUANTILE_PROMESSE = 0.963
+
 
 class QuantileParGroupe(RegressorMixin, BaseEstimator):
     """Prédit un quantile du délai observé dans le groupe de la commande.
@@ -92,3 +96,8 @@ def modele_gradient_boosting(**parametres) -> Pipeline:
         ("preparation", preparation()),
         ("modele", HistGradientBoostingRegressor(**(reglages | parametres))),
     ])
+
+
+def modele_promesse(quantile: float = QUANTILE_PROMESSE) -> Pipeline:
+    """Gradient boosting qui prédit un quantile élevé du délai : la promesse affichée au client."""
+    return modele_gradient_boosting(loss="quantile", quantile=quantile)

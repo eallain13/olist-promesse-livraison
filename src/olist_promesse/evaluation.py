@@ -103,3 +103,9 @@ def delai_promis_a_retard(courbe: pd.DataFrame, taux_de_retard: float) -> float:
     """Délai promis moyen lu sur la courbe pour un taux de retard donné (interpolation linéaire)."""
     courbe = courbe.sort_values("taux de retard (%)")
     return float(np.interp(taux_de_retard, courbe["taux de retard (%)"], courbe["délai promis moyen (j)"]))
+
+
+def quantile_pour_retard(courbe: pd.DataFrame, taux_de_retard: float) -> float:
+    """Quantile visé qui donne le taux de retard demandé sur la courbe (interpolation linéaire)."""
+    courbe = courbe.sort_values("taux de retard (%)")
+    return float(np.interp(taux_de_retard, courbe["taux de retard (%)"], courbe.index))

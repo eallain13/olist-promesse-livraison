@@ -2,7 +2,13 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from olist_promesse.modeles import QuantileParGroupe, modele_gradient_boosting, preparation
+from olist_promesse.modeles import (
+    QUANTILE_PROMESSE,
+    QuantileParGroupe,
+    modele_gradient_boosting,
+    modele_promesse,
+    preparation,
+)
 from olist_promesse.variables import COLONNES_BRUTES, VARIABLES
 
 
@@ -43,3 +49,8 @@ def test_parametres_remplacent_les_reglages_par_defaut():
     assert modele_gradient_boosting().get_params()["modele__loss"] == "absolute_error"
     promesse = modele_gradient_boosting(loss="quantile", quantile=0.9).get_params()
     assert (promesse["modele__loss"], promesse["modele__quantile"]) == ("quantile", 0.9)
+
+
+def test_modele_promesse_vise_le_quantile_retenu():
+    parametres = modele_promesse().get_params()
+    assert (parametres["modele__loss"], parametres["modele__quantile"]) == ("quantile", QUANTILE_PROMESSE)

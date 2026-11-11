@@ -58,7 +58,7 @@ développement (Jupyter, visualisation, tests).
 - [x] Analyse exploratoire
 - [x] Protocole de validation et bases de comparaison
 - [x] Variables et modèles
-- [ ] Promesse de livraison (régression quantile)
+- [x] Promesse de livraison (régression quantile)
 - [ ] Interprétation et analyse des erreurs
 - [ ] API, tests et Docker
 - [ ] Intégration continue et publication

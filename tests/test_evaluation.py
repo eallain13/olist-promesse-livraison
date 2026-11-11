@@ -1,6 +1,13 @@
 import pandas as pd
+import pytest
 
-from olist_promesse.evaluation import date_promise, decoupage_mensuel, en_retard
+from olist_promesse.evaluation import (
+    date_promise,
+    decoupage_mensuel,
+    delai_promis_a_retard,
+    en_retard,
+    quantile_pour_retard,
+)
 
 
 def commande(achat, livraison):
@@ -34,3 +41,12 @@ def test_livrer_le_jour_promis_est_a_l_heure():
         commande("2018-01-01 10:00", "2018-01-06 08:00"),
     ])
     assert en_retard(commandes, pd.Series([4.0, 4.0])).tolist() == [False, True]
+
+
+def test_lecture_de_la_courbe_promesse():
+    courbe = pd.DataFrame(
+        {"taux de retard (%)": [12.0, 8.0, 4.0], "délai promis moyen (j)": [20.0, 24.0, 30.0]},
+        index=pd.Index([0.94, 0.96, 0.98], name="quantile visé"),
+    )
+    assert quantile_pour_retard(courbe, 10.0) == pytest.approx(0.95)
+    assert delai_promis_a_retard(courbe, 6.0) == pytest.approx(27.0)
