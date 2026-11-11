@@ -3,6 +3,17 @@
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, RegressorMixin
+from sklearn.compose import ColumnTransformer
+from sklearn.model_selection import KFold
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import FunctionTransformer, OrdinalEncoder, TargetEncoder
+
+from olist_promesse.variables import (
+    VARIABLE_VENDEUR,
+    VARIABLES_CATEGORIELLES,
+    VARIABLES_NUMERIQUES,
+    construire_variables,
+)
 
 
 class QuantileParGroupe(RegressorMixin, BaseEstimator):
@@ -37,3 +48,32 @@ class QuantileParGroupe(RegressorMixin, BaseEstimator):
             cles = pd.MultiIndex.from_frame(X[colonnes]) if len(colonnes) > 1 else X[colonnes[0]]
             prediction = prediction.fillna(pd.Series(table.reindex(cles).to_numpy(), index=X.index))
         return prediction.fillna(self.global_).to_numpy()
+
+
+def preparation() -> Pipeline:
+    """Transforme les colonnes brutes d'une commande en variables numériques pour le modèle.
+
+    Les catégories deviennent des codes entiers (une catégorie inconnue à l'entraînement devient une
+    valeur manquante). Le vendeur est remplacé par son délai moyen lissé, appris sur l'entraînement :
+    pour les commandes d'entraînement, ce délai est calculé hors pli, sans la commande elle-même.
+    """
+    encodage = ColumnTransformer(
+        [
+            ("numeriques", "passthrough", VARIABLES_NUMERIQUES),
+            (
+                "categorielles",
+                OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=np.nan),
+                VARIABLES_CATEGORIELLES,
+            ),
+            (
+                "vendeur",
+                TargetEncoder(target_type="continuous", cv=KFold(n_splits=5, shuffle=True, random_state=0)),
+                [VARIABLE_VENDEUR],
+            ),
+        ],
+        verbose_feature_names_out=False,
+    )
+    return Pipeline([
+        ("variables", FunctionTransformer(construire_variables)),
+        ("encodage", encodage),
+    ]).set_output(transform="pandas")

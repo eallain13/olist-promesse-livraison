@@ -91,4 +91,4 @@ LEFT JOIN read_csv('olist_sellers_dataset.csv', types = {'seller_zip_code_prefix
 LEFT JOIN geo AS gs ON gs.prefixe = s.seller_zip_code_prefix
 LEFT JOIN geo AS gc ON gc.prefixe = cu.customer_zip_code_prefix
 LEFT JOIN avis AS av ON av.order_id = c.order_id
-ORDER BY c.order_purchase_timestamp
+ORDER BY c.order_purchase_timestamp, c.order_id
